@@ -38,7 +38,7 @@ services:
       default:
       graylog-network:
         aliases:
-          - graylog.local
+          - graylog.test
       nginx-network:
         aliases:
           - graylog.test

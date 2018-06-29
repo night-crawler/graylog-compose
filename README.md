@@ -2,8 +2,8 @@
 
 ## Preconditions
 
-1. This graylog config is designed to use with [docker-compose-letsencrypt-nginx-proxy-companion](https://github.com/evertramos/docker-compose-letsencrypt-nginx-proxy-companion) in __multi-network__ mode.
-2. Second network is used to reach the graylog instance from nginx container.
+1. This graylog config is designed to use with [docker-compose-letsencrypt-nginx-proxy-companion](https://github.com/evertramos/docker-compose-letsencrypt-nginx-proxy-companion).
+2. Second network is used to reach the graylog instance from other containers outside of `nginx-network`.
 3. Default forwarded TCP/UDP Input ports should be used only by the host itself.
 4. Do not forward ports to 0.0.0.0.
 
@@ -23,11 +23,10 @@
 7. Run `sysctl -p`.
 8. Create a new graylog network:
 
-        docker network create --attachable --driver overlay --subnet 10.100.100.1/24 graylog-network
-9. Edit docker-compose-letsencrypt-nginx-proxy-companion `.env` and set `SERVICE_NETWORK=graylog-network`.
-10. Set correct `LETSENCRYPT_HOST` && `LETSENCRYPT_EMAIL`.
+        docker network create --attachable --driver overlay --subnet 10.100.100.0/24 graylog-network
+9. Adjust `LETSENCRYPT_HOST` && `LETSENCRYPT_EMAIL`.
 
-Nginx cannot start anymore without graylog instance running, because it cannot resolve `graylog.local`. Be careful.
+Nginx cannot start anymore without graylog instance running, because it cannot resolve `graylog.test`. Be careful.
 
 ## Configuration
 
@@ -50,4 +49,4 @@ Create a new rsyslog.d config `/etc/rsyslog.d/graylog.conf`:
 
 ## TODO
 
-- Make it swarm
+- [~~Make it swarm~~](https://github.com/moby/moby/issues/32299)
