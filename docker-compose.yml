@@ -1,0 +1,74 @@
+version: '3.4'
+services:
+  mongo:
+    image: mongo:3
+    volumes:
+      - mongo_data:/data/db
+    networks:
+      default:
+
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:5.6.9
+    networks:
+      default:
+    volumes:
+      - es_data:/usr/share/elasticsearch/data
+    environment:
+      http.host: 0.0.0.0
+      xpack.security.enabled: 'false'
+      ES_JAVA_OPTS: -Xms1024m -Xmx1024m
+    deploy:
+      resources:
+        limits:
+          cpus: '0.50'
+          memory: 1g
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+
+  graylog:
+    image: graylog/graylog:3.0
+    environment:
+      VIRTUAL_HOST: graylog.test
+      VIRTUAL_PORT: 9000
+      #LETSENCRYPT_HOST: example.com
+      #LETSENCRYPT_EMAIL: admin@example.com
+    networks:
+      default:
+      graylog-network:
+        aliases:
+          - graylog.local
+      nginx-network:
+        aliases:
+          - graylog.test
+    volumes:
+      - graylog_journal:/usr/share/graylog/data/journal
+      - ./graylog/config:/usr/share/graylog/data/config
+
+    ports:
+      # Syslog TCP
+      - 127.0.0.1:514:514
+      # Syslog UDP
+      - 127.0.0.1:514:514/udp
+      # GELF TCP
+      - 127.0.0.1:12201:12201
+      # GELF UDP
+      - 127.0.0.1:12201:12201/udp
+
+
+networks:
+  default:
+  graylog-network:
+    external: true
+  nginx-network:
+    external: true
+
+
+volumes:
+  mongo_data:
+    driver: local
+  es_data:
+    driver: local
+  graylog_journal:
+    driver: local
