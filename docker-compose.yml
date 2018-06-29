@@ -45,6 +45,7 @@ services:
     volumes:
       - graylog_journal:/usr/share/graylog/data/journal
       - ./graylog/config:/usr/share/graylog/data/config
+      - ./geo:/var/geo
 
     ports:
       # Syslog TCP

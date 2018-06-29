@@ -41,6 +41,13 @@ Create a new rsyslog.d config `/etc/rsyslog.d/graylog.conf`:
 - patch `log_format` in `nginx.tmpl` according to scheme specified in content pack docs
 - comment out `access_log=off` in all virtual host sections
 
+### Geo data
+
+- Download [GeoLite2 Database](https://dev.maxmind.com/geoip/geoip2/geolite2/) and extract it in `./geo` directory
+- Update System / Configurations / Geo-Location Processor settings with a new path: `/var/geo/GeoLite2-City.mmdb`
+- Put GeoIP resolver last in section `Message Processors Configuration`
+- [docs](http://docs.graylog.org/en/2.4/pages/geolocation.html)
+
 ### Content packs
 
 - [Generic syslog](https://github.com/jkumar2001/graylog-generic-syslog)
