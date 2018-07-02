@@ -7,6 +7,13 @@
 3. Default forwarded TCP/UDP Input ports should be used only by the host itself.
 4. Do not forward ports to 0.0.0.0.
 
+### DOCKER SERVICE DISCOVERY WARNING
+
+Overlay attachable networks may have IP resolving bugs since Docker `>17.12.1`.
+IP addresses of deleted or previously stopped containers are not properly cleaned from Docker guts causing stale resolve responses.
+[Issue](https://github.com/moby/moby/issues/30487)
+To check if everything is OK run `nslookup <container_alias>`. It should return only correct addresses actually present in your installation. 
+
 ## Deployment
 
 1. `apt install pwgen`.
